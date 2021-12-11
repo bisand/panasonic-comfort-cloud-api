@@ -2,6 +2,7 @@ import { exit } from 'process';
 import { ComfortCloud } from '../src';
 import * as dotenv from 'dotenv';
 import { DeviceParameters } from '../src/models/interfaces';
+import { EcoMode } from '../src/models/enums';
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ const runner = new Promise<any>(async (resolve, reject) => {
     const parRes = await client.setParameters(deviceId, par);
     console.log(parRes);
     device.parameters.temperatureSet = 22;
+    device.parameters.ecoMode = EcoMode.Quiet;
     const parDev = await client.setDevice(device);
     console.log(parDev);
 

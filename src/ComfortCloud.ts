@@ -142,14 +142,14 @@ export class ComfortCloud {
             parameters.airSwingUD = device.parameters.airSwingUD;
         if (device.parameters.fanSpeed)
             parameters.fanSpeed = device.parameters.fanSpeed;
+        if (device.parameters.ecoFunctionData)
+            parameters.ecoFunctionData = device.parameters.ecoFunctionData;
+        if (device.parameters.ecoMode)
+            parameters.ecoMode = device.parameters.ecoMode;
         if (device.nanoeStandAlone && device.parameters.actualNanoe)
             parameters.actualNanoe = device.parameters.actualNanoe;
         if (device.nanoe && device.parameters.nanoe)
             parameters.nanoe = device.parameters.nanoe;
-        if (device.ecoNavi && device.parameters.ecoFunctionData)
-            parameters.ecoFunctionData = device.parameters.ecoFunctionData;
-        if (device.ecoNavi && device.parameters.ecoMode)
-            parameters.ecoMode = device.parameters.ecoMode;
         if ((device.autoMode && device.parameters.operationMode === OperationMode.Auto)
             || (device.coolMode && device.parameters.operationMode === OperationMode.Cool)
             || (device.dryMode && device.parameters.operationMode === OperationMode.Dry)
