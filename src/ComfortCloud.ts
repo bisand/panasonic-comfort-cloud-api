@@ -1,15 +1,9 @@
 import * as https from 'https';
 import { RequestOptions } from 'https';
 import * as url from 'url';
+import { HttpMethod } from './HttpMethod';
+import { Device, Group, GroupResponse } from './models/interfaces';
 import { LoginResponse } from './models/LoginResponse';
-import { GroupResponse } from "./models/GroupResponse";
-import { Group } from "./models/Group";
-import { Device } from "./models/Device";
-
-export enum HttpMethod {
-    Get = 'GET',
-    Post = 'POST',
-}
 
 export class ComfortCloud {
     private _config = {
@@ -33,9 +27,9 @@ export class ComfortCloud {
 
     /**
      * Login to Panasonic Comfort Cloud
-     * @param username string
-     * @param password string
-     * @returns Promise<LoginResponse | undefined>
+     * @param username Login username
+     * @param password Login password
+     * @returns LoginResponse containing access token.
      */
     public async login(username: string = this._config.username, password: string = this._config.password): Promise<LoginResponse | undefined> {
         const data = {
@@ -57,9 +51,9 @@ export class ComfortCloud {
 
     /**
      * Get groups.
-     * @returns Promise<Group[]>
+     * @returns A list of groups containing list of devices.
      */
-    public async groups(): Promise<Group[]> {
+    public async getGroups(): Promise<Group[]> {
         const uri = url.parse(`${this._config.base_url}${this._config.group_url}`, true);
         const options: RequestOptions = this.getRequestOptions(HttpMethod.Get, uri);
         const res = await this.request(options);
@@ -73,10 +67,10 @@ export class ComfortCloud {
 
     /**
      * Returns device with the provided Device ID
-     * @param deviceId string
-     * @returns Promise<Device>
+     * @param deviceId Device ID to use aka deviceGuid
+     * @returns Device based on deviceId
      */
-    public async device(deviceId: string): Promise<Device> {
+    public async getDevice(deviceId: string): Promise<Device> {
         const uri = url.parse(`${this._config.base_url}${this._config.device_url.replace('{guid}', deviceId)}`, true);
         const options: RequestOptions = this.getRequestOptions(HttpMethod.Get, uri);
         const res = await this.request(options);
@@ -86,8 +80,8 @@ export class ComfortCloud {
 
     /**
      * 
-     * @param options RequestOprions
-     * @param data any
+     * @param options RequestOprions to use
+     * @param data optional data to use for request body
      * @returns Promise<any>
      */
     private async request(options: https.RequestOptions, data?: any): Promise<any> {
@@ -97,7 +91,6 @@ export class ComfortCloud {
                 res.on('data', function (chunk: string) {
                     str += chunk;
                 });
-
                 res.on('end', function () {
                     if (res.statusCode === 200) resolve(str);
                     else if (res.statusCode === 401) reject(str);
@@ -114,6 +107,12 @@ export class ComfortCloud {
         });
     }
 
+    /**
+     * 
+     * @param method HTTP method to use
+     * @param uri Uri to use
+     * @returns An object containing request options
+     */
     private getRequestOptions(method: HttpMethod, uri: url.UrlWithParsedQuery): https.RequestOptions {
         return {
             host: uri.host,

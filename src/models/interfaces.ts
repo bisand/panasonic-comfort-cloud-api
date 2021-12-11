@@ -1,3 +1,5 @@
+import { AirSwingLR, AirSwingUD, EcoMode, FanAutoMode, FanSpeed, NanoeMode, OperationMode, Power } from './enums';
+
 export interface Device {
     dryTempMin: number;
     modeAvlList: ModeAvlList;
@@ -84,21 +86,21 @@ export interface ModeAvlList {
 
 export interface Parameters {
     ecoFunctionData: number;
-    airSwingLR: number;
-    nanoe: number;
+    airSwingLR: AirSwingLR;
+    nanoe: NanoeMode;
     lastSettingMode: number;
     ecoNavi: number;
-    ecoMode: number;
-    operationMode: number;
-    fanAutoMode: number;
+    ecoMode: EcoMode;
+    operationMode: OperationMode;
+    fanAutoMode: FanAutoMode;
     temperatureSet: number;
-    fanSpeed: number;
+    fanSpeed: FanSpeed;
     iAuto: number;
     airQuality: number;
     insideTemperature: number;
     outTemperature: number;
-    operate: number;
+    operate: Power;
     airDirection: number;
-    actualNanoe: number;
-    airSwingUD: number;
+    actualNanoe: NanoeMode;
+    airSwingUD: AirSwingUD;
 }
