@@ -1,0 +1,1 @@
+# panasonic-comfort-cloud-api
