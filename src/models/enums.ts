@@ -61,5 +61,5 @@ export enum NanoeMode {
     Off = 1,
     On = 2,
     ModeG = 3,
-    All = 4
+    All = 4,
 }

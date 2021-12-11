@@ -1,37 +1,41 @@
 import { AirSwingLR, AirSwingUD, EcoMode, FanAutoMode, FanSpeed, NanoeMode, OperationMode, Power } from './enums';
 
 export interface Device {
-    dryTempMin: number;
-    modeAvlList: ModeAvlList;
-    airSwingLR: boolean;
-    nanoe: boolean;
+    deviceGuid: string;
+
     autoMode: boolean;
-    autoSwingUD: boolean;
     ecoNavi: boolean;
-    heatTempMax: number;
-    temperatureUnit: number;
     iAutoX: boolean;
-    coolTempMin: number;
-    autoTempMin: number;
     quietMode: boolean;
     powerfulMode: boolean;
-    timestamp: number;
     fanMode: boolean;
     coolMode: boolean;
+    dryMode: boolean;
+    nanoeStandAlone: boolean;
+    nanoe: boolean;
+    heatMode: boolean;
+    pairedFlg: boolean;
+
+    modeAvlList: ModeAvlList;
+    airSwingLR: AirSwingLR;
+    autoSwingUD: AirSwingUD;
+
+    dryTempMin: number;
+    heatTempMax: number;
+    temperatureUnit: number;
+    coolTempMin: number;
+    autoTempMin: number;
+    timestamp: number;
     summerHouse: number;
     coolTempMax: number;
     permission: number;
-    dryMode: boolean;
-    nanoeStandAlone: boolean;
-    heatMode: boolean;
     fanSpeedMode: number;
     dryTempMax: number;
     autoTempMax: number;
     fanDirectionMode: number;
     ecoFunction: number;
     heatTempMin: number;
-    pairedFlg: boolean;
-    parameters: Parameters;
+    parameters: DeviceParameters;
 }
 
 export interface Group {
@@ -44,10 +48,9 @@ export interface GroupDevice {
     deviceGuid: string;
     deviceType: string;
     deviceName: string;
-    permission: number;
     deviceModuleNumber: string;
     deviceHashGuid: string;
-    summerHouse: number;
+
     iAutoX: boolean;
     nanoe: boolean;
     nanoeStandAlone: boolean;
@@ -61,11 +64,15 @@ export interface GroupDevice {
     quietMode: boolean;
     airSwingLR: boolean;
     autoSwingUD: boolean;
+    coordinableFlg: boolean;
+
+    permission: number;
+    summerHouse: number;
     ecoFunction: number;
     temperatureUnit: number;
+
     modeAvlList: ModeAvlList;
-    coordinableFlg: boolean;
-    parameters: Parameters;
+    parameters: DeviceParameters;
 }
 
 export interface GroupResponse {
@@ -84,23 +91,23 @@ export interface ModeAvlList {
     fanMode: number;
 }
 
-export interface Parameters {
-    ecoFunctionData: number;
-    airSwingLR: AirSwingLR;
-    nanoe: NanoeMode;
-    lastSettingMode: number;
-    ecoNavi: number;
-    ecoMode: EcoMode;
-    operationMode: OperationMode;
-    fanAutoMode: FanAutoMode;
-    temperatureSet: number;
-    fanSpeed: FanSpeed;
-    iAuto: number;
-    airQuality: number;
-    insideTemperature: number;
-    outTemperature: number;
-    operate: Power;
-    airDirection: number;
-    actualNanoe: NanoeMode;
-    airSwingUD: AirSwingUD;
+export interface DeviceParameters {
+    ecoFunctionData?: number;
+    airSwingLR?: AirSwingLR;
+    nanoe?: NanoeMode;
+    lastSettingMode?: number;
+    ecoNavi?: number;
+    ecoMode?: EcoMode;
+    operationMode?: OperationMode;
+    fanAutoMode?: FanAutoMode;
+    temperatureSet?: number;
+    fanSpeed?: FanSpeed;
+    iAuto?: number;
+    airQuality?: number;
+    insideTemperature?: number;
+    outTemperature?: number;
+    operate?: Power;
+    airDirection?: number;
+    actualNanoe?: NanoeMode;
+    airSwingUD?: AirSwingUD;
 }
