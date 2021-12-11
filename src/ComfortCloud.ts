@@ -2,7 +2,9 @@ import * as https from 'https';
 import { RequestOptions } from 'https';
 import * as url from 'url';
 import { LoginResponse } from './models/LoginResponse';
-import { Device, Group, GroupResponse } from './models/GroupModels';
+import { GroupResponse } from "./models/GroupResponse";
+import { Group } from "./models/Group";
+import { Device } from "./models/Device";
 
 export enum HttpMethod {
     Get = 'GET',
@@ -29,7 +31,13 @@ export class ComfortCloud {
         this._config.password = password;
     }
 
-    public async login(username: string = this._config.username, password: string = this._config.password) {
+    /**
+     * Login to Panasonic Comfort Cloud
+     * @param username string
+     * @param password string
+     * @returns Promise<LoginResponse | undefined>
+     */
+    public async login(username: string = this._config.username, password: string = this._config.password): Promise<LoginResponse | undefined> {
         const data = {
             language: '0',
             loginId: username,
@@ -47,6 +55,10 @@ export class ComfortCloud {
         return undefined;
     }
 
+    /**
+     * Get groups.
+     * @returns Promise<Group[]>
+     */
     public async groups(): Promise<Group[]> {
         const uri = url.parse(`${this._config.base_url}${this._config.group_url}`, true);
         const options: RequestOptions = this.getRequestOptions(HttpMethod.Get, uri);
@@ -59,6 +71,11 @@ export class ComfortCloud {
         return [] as Group[];
     }
 
+    /**
+     * Returns device with the provided Device ID
+     * @param deviceId string
+     * @returns Promise<Device>
+     */
     public async device(deviceId: string): Promise<Device> {
         const uri = url.parse(`${this._config.base_url}${this._config.device_url.replace('{guid}', deviceId)}`, true);
         const options: RequestOptions = this.getRequestOptions(HttpMethod.Get, uri);
@@ -67,6 +84,12 @@ export class ComfortCloud {
         return result as Device;
     }
 
+    /**
+     * 
+     * @param options RequestOprions
+     * @param data any
+     * @returns Promise<any>
+     */
     private async request(options: https.RequestOptions, data?: any): Promise<any> {
         return await new Promise<any>((resolve, reject) => {
             const req = https.request(options, (res: any) => {
