@@ -1,0 +1,11 @@
+.eslintrc.json
+.mocharc.json
+.travis.yml
+.vscode/
+_config.yml
+npm-publish*
+myenergi-api-*
+tsconfig.json
+tslint.json
+.prettierrc
+.env

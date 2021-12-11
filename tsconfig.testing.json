@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+      "module": "commonjs",
+      "target": "es2015",
+      "lib": ["es2017"],
+      "outDir": "./dist",
+      "declaration": false,
+      "noImplicitAny": false,
+      "removeComments": true,
+      "inlineSourceMap": true,
+      "moduleResolution": "node",
+    },
+    "include": ["src/**/*.ts", "src/**/*.d.ts", "tests/**/*.ts"]
+  }
