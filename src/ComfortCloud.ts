@@ -1,7 +1,7 @@
 import * as https from 'https';
 import { RequestOptions } from 'https';
 import * as url from 'url';
-import { HttpMethod } from './HttpMethod';
+import { HttpMethod } from './models/HttpMethod';
 import { OperationMode } from './models/enums';
 import { Device, DeviceParameters, Group, GroupResponse } from './models/interfaces';
 import { LoginRequest } from './models/LoginRequest';
@@ -94,11 +94,10 @@ export class ComfortCloud {
                 return response;
             }
             return response;
-
         } catch (error: any) {
             const res: UpdateResponse = { status: -1 };
             res.error = error;
-            res.statusText = 'Invalid parameter. Please check the input and use the Device\'s boolean values to check valid capabilities.';
+            res.statusText = "Invalid parameter. Please check the input and use the Device's boolean values to check valid capabilities.";
             if (error && error.code && error.message) {
                 res.status = error.code;
             }
@@ -126,65 +125,46 @@ export class ComfortCloud {
         }
     }
 
-    private getDeviceParameters(device: Device): DeviceParameters {
+    public getDeviceParameters(device: Device): DeviceParameters {
         const parameters: DeviceParameters = {};
-        if (device.parameters.operate)
-            parameters.operate = device.parameters.operate;
-        if (device.parameters.temperatureSet)
-            parameters.temperatureSet = device.parameters.temperatureSet;
-        if (device.parameters.fanAutoMode)
-            parameters.fanAutoMode = device.parameters.fanAutoMode;
-        if (device.parameters.airDirection)
-            parameters.airDirection = device.parameters.airDirection;
-        if (device.parameters.airSwingLR)
-            parameters.airSwingLR = device.parameters.airSwingLR;
-        if (device.parameters.airSwingUD)
-            parameters.airSwingUD = device.parameters.airSwingUD;
-        if (device.parameters.fanSpeed)
-            parameters.fanSpeed = device.parameters.fanSpeed;
-        if (device.parameters.ecoFunctionData)
-            parameters.ecoFunctionData = device.parameters.ecoFunctionData;
-        if (device.parameters.ecoMode)
-            parameters.ecoMode = device.parameters.ecoMode;
-        if (device.nanoeStandAlone && device.parameters.actualNanoe)
-            parameters.actualNanoe = device.parameters.actualNanoe;
-        if (device.nanoe && device.parameters.nanoe)
-            parameters.nanoe = device.parameters.nanoe;
-        if ((device.autoMode && device.parameters.operationMode === OperationMode.Auto)
-            || (device.coolMode && device.parameters.operationMode === OperationMode.Cool)
-            || (device.dryMode && device.parameters.operationMode === OperationMode.Dry)
-            || (device.heatMode && device.parameters.operationMode === OperationMode.Heat)
-            || (device.fanMode && device.parameters.operationMode === OperationMode.Fan))
+        if (!device.parameters) return parameters;
+        if (device.parameters.operate !== undefined) parameters.operate = device.parameters.operate;
+        if (device.parameters.temperatureSet !== undefined) parameters.temperatureSet = device.parameters.temperatureSet;
+        if (device.parameters.fanAutoMode !== undefined) parameters.fanAutoMode = device.parameters.fanAutoMode;
+        if (device.parameters.airDirection !== undefined) parameters.airDirection = device.parameters.airDirection;
+        if (device.parameters.airSwingLR !== undefined) parameters.airSwingLR = device.parameters.airSwingLR;
+        if (device.parameters.airSwingUD !== undefined) parameters.airSwingUD = device.parameters.airSwingUD;
+        if (device.parameters.fanSpeed !== undefined) parameters.fanSpeed = device.parameters.fanSpeed;
+        if (device.parameters.ecoFunctionData !== undefined) parameters.ecoFunctionData = device.parameters.ecoFunctionData;
+        if (device.parameters.ecoMode !== undefined) parameters.ecoMode = device.parameters.ecoMode;
+        if (device.nanoeStandAlone && device.parameters.actualNanoe !== undefined) parameters.actualNanoe = device.parameters.actualNanoe;
+        if (device.nanoe && device.parameters.nanoe !== undefined) parameters.nanoe = device.parameters.nanoe;
+        if (
+            (device.autoMode && device.parameters.operationMode === OperationMode.Auto) ||
+            (device.coolMode && device.parameters.operationMode === OperationMode.Cool) ||
+            (device.dryMode && device.parameters.operationMode === OperationMode.Dry) ||
+            (device.heatMode && device.parameters.operationMode === OperationMode.Heat) ||
+            (device.fanMode && device.parameters.operationMode === OperationMode.Fan)
+        )
             parameters.operationMode = device.parameters.operationMode;
         return parameters;
     }
 
-    private getParameters(parameters: DeviceParameters): DeviceParameters {
+    public getParameters(parameters: DeviceParameters): DeviceParameters {
         const par: DeviceParameters = {};
-        if (parameters.operate)
-            par.operate = parameters.operate;
-        if (parameters.temperatureSet)
-            par.temperatureSet = parameters.temperatureSet;
-        if (parameters.fanAutoMode)
-            par.fanAutoMode = parameters.fanAutoMode;
-        if (parameters.airDirection)
-            par.airDirection = parameters.airDirection;
-        if (parameters.airSwingLR)
-            par.airSwingLR = parameters.airSwingLR;
-        if (parameters.airSwingUD)
-            par.airSwingUD = parameters.airSwingUD;
-        if (parameters.fanSpeed)
-            par.fanSpeed = parameters.fanSpeed;
-        if (parameters.actualNanoe)
-            par.actualNanoe = parameters.actualNanoe;
-        if (parameters.nanoe)
-            par.nanoe = parameters.nanoe;
-        if (parameters.ecoFunctionData)
-            par.ecoFunctionData = parameters.ecoFunctionData;
-        if (parameters.ecoMode)
-            par.ecoMode = parameters.ecoMode;
-        if (parameters.operationMode)
-            par.operationMode = parameters.operationMode;
+        if (!parameters) return par;
+        if (parameters.operate !== undefined) par.operate = parameters.operate;
+        if (parameters.temperatureSet !== undefined) par.temperatureSet = parameters.temperatureSet;
+        if (parameters.fanAutoMode !== undefined) par.fanAutoMode = parameters.fanAutoMode;
+        if (parameters.airDirection !== undefined) par.airDirection = parameters.airDirection;
+        if (parameters.airSwingLR !== undefined) par.airSwingLR = parameters.airSwingLR;
+        if (parameters.airSwingUD !== undefined) par.airSwingUD = parameters.airSwingUD;
+        if (parameters.fanSpeed !== undefined) par.fanSpeed = parameters.fanSpeed;
+        if (parameters.actualNanoe !== undefined) par.actualNanoe = parameters.actualNanoe;
+        if (parameters.nanoe !== undefined) par.nanoe = parameters.nanoe;
+        if (parameters.ecoFunctionData !== undefined) par.ecoFunctionData = parameters.ecoFunctionData;
+        if (parameters.ecoMode !== undefined) par.ecoMode = parameters.ecoMode;
+        if (parameters.operationMode !== undefined) par.operationMode = parameters.operationMode;
         return par;
     }
 
