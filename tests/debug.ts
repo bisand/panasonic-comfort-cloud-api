@@ -16,6 +16,8 @@ const runner = new Promise<any>(async (resolve, reject) => {
     const deviceId = groups[0].deviceList[0].deviceGuid;
     const device = await client.getDevice(deviceId);
     console.log(device);
+    const deviceNow = await client.getDeviceNow(deviceId);
+    console.log(deviceNow);
     const par: DeviceParameters = { temperatureSet: 21.5 };
     const parRes = await client.setParameters(deviceId, par);
     console.log(parRes);

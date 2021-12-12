@@ -79,8 +79,21 @@ export class ComfortCloud {
      * @param deviceId Device ID to use. Aka deviceGuid
      * @returns Device based on deviceId
      */
-    public async getDevice(deviceId: string): Promise<Device> {
+     public async getDevice(deviceId: string): Promise<Device> {
         const uri = url.parse(`${this._config.base_url}${this._config.device_url.replace('{guid}', deviceId)}`, true);
+        const options: RequestOptions = this.getRequestOptions(HttpMethod.Get, uri);
+        const result = await this.request(options);
+        result.deviceGuid = deviceId;
+        return result as Device;
+    }
+
+    /**
+     * Returns device with the provided Device ID
+     * @param deviceId Device ID to use. Aka deviceGuid
+     * @returns Device based on deviceId
+     */
+     public async getDeviceNow(deviceId: string): Promise<Device> {
+        const uri = url.parse(`${this._config.base_url}${this._config.device_now_url.replace('{guid}', deviceId)}`, true);
         const options: RequestOptions = this.getRequestOptions(HttpMethod.Get, uri);
         const result = await this.request(options);
         result.deviceGuid = deviceId;
