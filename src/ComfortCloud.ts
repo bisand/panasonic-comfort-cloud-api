@@ -21,7 +21,19 @@ export class ComfortCloud {
         device_history_url: '/deviceHistoryData',
     };
     private _accessToken: string = '';
+    public get token(): string {
+        return this._accessToken;
+    }
+    public set token(value: string) {
+        this._accessToken = value;
+    }
     private _clientId: string = '';
+    public get clientId(): string {
+        return this._clientId;
+    }
+    public set clientId(value: string) {
+        this._clientId = value;
+    }
 
     constructor(username: string, password: string) {
         this._config.username = username;
