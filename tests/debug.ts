@@ -9,20 +9,20 @@ dotenv.config();
 const runner = new Promise<any>(async (resolve, reject) => {
     const client = new ComfortCloud(process.env.USERNAME as string, process.env.PASSWORD as string);
 
-    const token = await client.login();
-    console.log(token);
-    const groups = await client.getGroups();
-    console.log(groups);
-    const deviceId = groups[0].deviceList[0].deviceGuid;
-    const device = await client.getDevice(deviceId);
-    console.log(device);
+    // const token = await client.login();
+    // console.log(token);
+    // const groups = await client.getGroups();
+    // console.log(groups);
+    // const deviceId = groups[0].deviceList[0].deviceGuid;
+    // const device = await client.getDevice(deviceId);
+    // console.log(device);
     const par: DeviceParameters = { temperatureSet: 21.5 };
-    const parRes = await client.setParameters(deviceId, par);
+    const parRes = await client.setParameters('CS-HZ25UKE+4939729714', par);
     console.log(parRes);
-    device.parameters.temperatureSet = 22;
-    device.parameters.ecoMode = EcoMode.Quiet;
-    const parDev = await client.setDevice(device);
-    console.log(parDev);
+    // device.parameters.temperatureSet = 22;
+    // device.parameters.ecoMode = EcoMode.Quiet;
+    // const parDev = await client.setDevice(device);
+    // console.log(parDev);
 
     resolve('OK');
 });

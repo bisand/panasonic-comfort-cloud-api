@@ -107,6 +107,8 @@ export class ComfortCloud {
             }
             return response;
         } catch (error: any) {
+            if (error.statusCode === 401 || error.statusCode === 403)
+                throw new Error(error);
             const res: UpdateResponse = { status: -1 };
             res.error = error;
             res.statusText = "Invalid parameter. Please check the input and use the Device's boolean values to check valid capabilities.";
