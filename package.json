@@ -1,6 +1,6 @@
 {
   "name": "panasonic-comfort-cloud-api",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Client for Panasonic Comfort Cloud API to control air conditioners",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
