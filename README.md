@@ -64,14 +64,14 @@ console.log(parDev);
 ```Typescript
 // Use enums for correct values.
 const par: DeviceParameters = {
-    operate = Power.On,
-    operationMode = OperationMode.Auto,
-    ecoMode = EcoMode.Auto,
-    temperatureSet = 22,
-    airSwingUD = AirSwingUD.Mid,
-    airSwingLR = AirSwingLR.Mid,
-    fanAutoMode = FanAutoMode.AirSwingAuto,
-    fanSpeed = FanSpeed.Auto
+    operate: Power.On,
+    operationMode: OperationMode.Auto,
+    ecoMode: EcoMode.Auto,
+    temperatureSet: 22,
+    airSwingUD: AirSwingUD.Mid,
+    airSwingLR: AirSwingLR.Mid,
+    fanAutoMode: FanAutoMode.AirSwingAuto,
+    fanSpeed: FanSpeed.Auto
 };
 const parRes = await client.setParameters(deviceId, par);
 ```
