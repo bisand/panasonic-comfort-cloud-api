@@ -197,7 +197,12 @@ export class ComfortCloud {
                 res.on('end', function () {
                     let response: any = self.isJsonString(str) ? JSON.parse(str) : str;
                     if (res.statusCode >= 200 && res.statusCode < 300) resolve(response);
-                    else reject(response);
+                    else {
+                        response.httpCode = res.statusCode;
+                        response.statusCode = res.statusCode;
+                        response.statusMessage = res.statusMessage;
+                        reject(response);
+                    }
                 });
             });
             req.on('error', (e: any) => {
