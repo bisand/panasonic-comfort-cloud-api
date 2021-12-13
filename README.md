@@ -79,9 +79,7 @@ const parRes = await client.setParameters(deviceId, par);
 ### Full code example
 
 ```Typescript
-import { ComfortCloud } from 'panasonic-comfort-cloud-api';
-import { DeviceParameters } from 'panasonic-comfort-cloud-api/dist/models/interfaces';
-import { AirSwingLR, AirSwingUD, EcoMode, FanAutoMode, FanSpeed, OperationMode, Power } from 'panasonic-comfort-cloud-api/dist/models/enums';
+import { ComfortCloud, DeviceParameters, AirSwingLR, AirSwingUD, EcoMode, FanAutoMode, FanSpeed, OperationMode, Power } from 'panasonic-comfort-cloud-api';
 import { exit } from 'process';
 import * as dotenv from 'dotenv';
 

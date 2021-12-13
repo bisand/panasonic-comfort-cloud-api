@@ -47,6 +47,8 @@ export class ComfortCloud {
      * @returns LoginResponse containing access token.
      */
     public async login(username: string = this._config.username, password: string = this._config.password): Promise<LoginResponse | undefined> {
+        if (!username || !password)
+            throw new Error('Username and password must contain a value.');
         const data = new LoginRequest(username, password);
         const uri = url.parse(`${this._config.base_url}${this._config.login_url}`, true);
         const options: RequestOptions = this.getRequestOptions(HttpMethod.Post, uri);
