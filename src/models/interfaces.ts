@@ -1,4 +1,4 @@
-import { AirSwingLR, AirSwingUD, EcoMode, FanAutoMode, FanSpeed, NanoeMode, OperationMode, Power } from './enums';
+import { AirSwingLR, AirSwingUD, EcoMode, FanAutoMode, FanSpeed, NanoeMode, OperationMode, Power } from "./enums";
 
 export interface Device {
     deviceGuid: string;

@@ -1,8 +1,8 @@
-import { exit } from 'process';
-import { ComfortCloud } from '../src';
-import * as dotenv from 'dotenv';
-import { DeviceParameters } from '../src/models/interfaces';
-import { EcoMode, AirSwingLR, AirSwingUD, FanAutoMode, FanSpeed, NanoeMode, OperationMode, Power, dataMode } from '../src/models/enums';
+import { exit } from "process";
+import { ComfortCloud } from "../src";
+import * as dotenv from "dotenv";
+import { DeviceParameters } from "../src/models/interfaces";
+import { EcoMode, AirSwingLR, AirSwingUD, FanAutoMode, FanSpeed, NanoeMode, OperationMode, Power, dataMode } from "../src/models/enums";
 
 dotenv.config();
 
@@ -30,7 +30,7 @@ const runner = new Promise<any>(async (resolve, reject) => {
         airSwingUD: AirSwingUD.Mid,
         airSwingLR: AirSwingLR.Mid,
         fanAutoMode: FanAutoMode.AirSwingAuto,
-        fanSpeed: FanSpeed.Auto
+        fanSpeed: FanSpeed.Auto,
     };
     const parRes = await client.setParameters(deviceId, par);
     console.log(parRes);
@@ -40,14 +40,15 @@ const runner = new Promise<any>(async (resolve, reject) => {
     const parDev = await client.setDevice(device);
     console.log(parDev);
 
-    resolve('OK');
+    resolve("OK");
 });
 
-runner.then(x => {
-    console.log(x);
-    exit();
-}).catch(x => {
-    console.error(x);
-    exit();
-});
-
+runner
+    .then((x) => {
+        console.log(x);
+        exit();
+    })
+    .catch((x) => {
+        console.error(x);
+        exit();
+    });

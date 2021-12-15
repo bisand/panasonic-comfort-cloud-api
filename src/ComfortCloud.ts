@@ -1,33 +1,33 @@
-import * as https from 'https';
-import { RequestOptions } from 'https';
-import * as url from 'url';
-import { HttpMethod } from './models/HttpMethod';
-import { OperationMode } from './models/enums';
-import { Device, DeviceParameters, Group, GroupResponse } from './models/interfaces';
-import { LoginRequest } from './models/LoginRequest';
-import { LoginResponse } from './models/LoginResponse';
-import { UpdateResponse } from './models/UpdateResponse';
+import * as https from "https";
+import { RequestOptions } from "https";
+import * as url from "url";
+import { HttpMethod } from "./models/HttpMethod";
+import { OperationMode } from "./models/enums";
+import { Device, DeviceParameters, Group, GroupResponse } from "./models/interfaces";
+import { LoginRequest } from "./models/LoginRequest";
+import { LoginResponse } from "./models/LoginResponse";
+import { UpdateResponse } from "./models/UpdateResponse";
 
 export class ComfortCloud {
     private _config = {
-        username: '',
-        password: '',
-        base_url: 'https://accsmart.panasonic.com',
-        login_url: '/auth/login',
-        group_url: '/device/group',
-        device_url: '/deviceStatus/{guid}',
-        device_now_url: '/deviceStatus/now/{guid}',
-        device_control_url: '/deviceStatus/control',
-        device_history_url: '/deviceHistoryData',
+        username: "",
+        password: "",
+        base_url: "https://accsmart.panasonic.com",
+        login_url: "/auth/login",
+        group_url: "/device/group",
+        device_url: "/deviceStatus/{guid}",
+        device_now_url: "/deviceStatus/now/{guid}",
+        device_control_url: "/deviceStatus/control",
+        device_history_url: "/deviceHistoryData",
     };
-    private _accessToken: string = '';
+    private _accessToken: string = "";
     public get token(): string {
         return this._accessToken;
     }
     public set token(value: string) {
         this._accessToken = value;
     }
-    private _clientId: string = '';
+    private _clientId: string = "";
     public get clientId(): string {
         return this._clientId;
     }
@@ -47,8 +47,7 @@ export class ComfortCloud {
      * @returns LoginResponse containing access token.
      */
     public async login(username: string = this._config.username, password: string = this._config.password): Promise<LoginResponse | undefined> {
-        if (!username || !password)
-            throw new Error('Username and password must contain a value.');
+        if (!username || !password) throw new Error("Username and password must contain a value.");
         const data = new LoginRequest(username, password);
         const uri = url.parse(`${this._config.base_url}${this._config.login_url}`, true);
         const options: RequestOptions = this.getRequestOptions(HttpMethod.Post, uri);
@@ -81,8 +80,8 @@ export class ComfortCloud {
      * @param deviceId Device ID to use. Aka deviceGuid
      * @returns Device based on deviceId
      */
-     public async getDevice(deviceId: string): Promise<Device> {
-        const uri = url.parse(`${this._config.base_url}${this._config.device_url.replace('{guid}', deviceId)}`, true);
+    public async getDevice(deviceId: string): Promise<Device> {
+        const uri = url.parse(`${this._config.base_url}${this._config.device_url.replace("{guid}", deviceId)}`, true);
         const options: RequestOptions = this.getRequestOptions(HttpMethod.Get, uri);
         const result = await this.request(options);
         result.deviceGuid = deviceId;
@@ -94,8 +93,8 @@ export class ComfortCloud {
      * @param deviceId Device ID to use. Aka deviceGuid
      * @returns Device based on deviceId
      */
-     public async getDeviceNow(deviceId: string): Promise<Device> {
-        const uri = url.parse(`${this._config.base_url}${this._config.device_now_url.replace('{guid}', deviceId)}`, true);
+    public async getDeviceNow(deviceId: string): Promise<Device> {
+        const uri = url.parse(`${this._config.base_url}${this._config.device_now_url.replace("{guid}", deviceId)}`, true);
         const options: RequestOptions = this.getRequestOptions(HttpMethod.Get, uri);
         const result = await this.request(options);
         result.deviceGuid = deviceId;
@@ -114,16 +113,15 @@ export class ComfortCloud {
             const options: RequestOptions = this.getRequestOptions(HttpMethod.Post, uri);
             const requestBody = { deviceGuid: deviceId, parameters: this.getParameters(parameters) };
             const result = await this.request(options, JSON.stringify(requestBody));
-            const response: UpdateResponse = { status: -1, statusText: 'Unknown response' };
+            const response: UpdateResponse = { status: -1, statusText: "Unknown response" };
             if (result) {
                 response.status = result.result;
-                response.statusText = 'OK';
+                response.statusText = "OK";
                 return response;
             }
             return response;
         } catch (error: any) {
-            if (error.statusCode === 401 || error.statusCode === 403)
-                throw error;
+            if (error.statusCode === 401 || error.statusCode === 403) throw error;
             error.statusText = "Invalid parameter. Please check the input and use the Device's boolean values to check valid capabilities.";
             throw error;
         }
@@ -202,11 +200,11 @@ export class ComfortCloud {
         const self = this;
         return await new Promise<any>((resolve, reject) => {
             const req = https.request(options, (res: any) => {
-                let str: string = '';
-                res.on('data', function (chunk: string) {
+                let str: string = "";
+                res.on("data", function (chunk: string) {
                     str += chunk;
                 });
-                res.on('end', function () {
+                res.on("end", function () {
                     let response: any = self.isJsonString(str) ? JSON.parse(str) : str;
                     if (res.statusCode >= 200 && res.statusCode < 300) resolve(response);
                     else {
@@ -217,7 +215,7 @@ export class ComfortCloud {
                     }
                 });
             });
-            req.on('error', (e: any) => {
+            req.on("error", (e: any) => {
                 console.error(`problem with request: ${e.message}`);
                 reject(e);
             });
@@ -241,14 +239,14 @@ export class ComfortCloud {
             path: uri.path,
             method: method,
             headers: {
-                Connection: 'Keep-Alive',
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
+                Connection: "Keep-Alive",
+                "Content-Type": "application/json",
+                Accept: "application/json",
                 Host: uri.hostname as string,
-                'X-APP-TYPE': 1,
-                'X-APP-VERSION': '1.20.0',
-                'X-User-Authorization': this._accessToken,
-                'User-Agent': 'G-RAC',
+                "X-APP-TYPE": 1,
+                "X-APP-VERSION": "1.20.0",
+                "X-User-Authorization": this._accessToken,
+                "User-Agent": "G-RAC",
             },
         };
     }
