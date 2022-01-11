@@ -1,10 +1,11 @@
 # panasonic-comfort-cloud-api
 
-![NPM](https://img.shields.io/npm/l/panasonic-comfort-cloud-api)
+[![DeepScan grade](https://deepscan.io/api/teams/16513/projects/19836/branches/520486/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=16513&pid=19836&bid=520486)
 ![GitHub last commit](https://img.shields.io/github/last-commit/bisand/panasonic-comfort-cloud-api)
 ![Travis (.com)](https://img.shields.io/travis/com/bisand/panasonic-comfort-cloud-api)
 ![npm](https://img.shields.io/npm/v/panasonic-comfort-cloud-api)
 ![npm](https://img.shields.io/npm/dw/panasonic-comfort-cloud-api)
+![NPM](https://img.shields.io/npm/l/panasonic-comfort-cloud-api)
 
 Client for Panasonic Comfort Cloud API to control air conditioners.
 
