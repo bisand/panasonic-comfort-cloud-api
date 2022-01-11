@@ -2,7 +2,7 @@ import { exit } from "process";
 import { ComfortCloud } from "../src";
 import * as dotenv from "dotenv";
 import { DeviceParameters } from "../src/models/interfaces";
-import { EcoMode, AirSwingLR, AirSwingUD, FanAutoMode, FanSpeed, NanoeMode, OperationMode, Power, dataMode } from "../src/models/enums";
+import { EcoMode, AirSwingLR, AirSwingUD, FanAutoMode, FanSpeed, OperationMode, Power } from "../src/models/enums";
 
 dotenv.config();
 

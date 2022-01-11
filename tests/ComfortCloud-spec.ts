@@ -1,7 +1,7 @@
 import { ComfortCloud } from "../src/ComfortCloud";
 import { expect } from "chai";
 import { Device, DeviceParameters } from "../src/models/interfaces";
-import { AirSwingLR, OperationMode } from "../src/models/enums";
+import { OperationMode } from "../src/models/enums";
 
 describe("MyEnergi Tests", () => {
     it("should be able to test", () => {
