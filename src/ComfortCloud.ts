@@ -1,4 +1,5 @@
 import * as https from "https";
+import http from 'http';
 import { RequestOptions } from "https";
 import * as url from "url";
 import { HttpMethod } from "./models/HttpMethod";
@@ -199,30 +200,38 @@ export class ComfortCloud {
     private async request(options: https.RequestOptions, data?: any): Promise<any> {
         const self = this;
         return await new Promise<any>((resolve, reject) => {
-            const req = https.request(options, (res: any) => {
-                let str: string = "";
-                res.on("data", function (chunk: string) {
-                    str += chunk;
+            const client = (options.protocol == "https:") ? https : http;
+            try {
+                const req = client.request(options, (res: any) => {
+                    let str: string = "";
+                    res.on("data", (chunk: string) => {
+                        str += chunk;
+                    });
+                    res.on("end", () => {
+                        const response: any = this.JsonTryParse(str);
+                        if (res.statusCode >= 200 && res.statusCode < 300) {
+                            resolve(response);
+                        } else {
+                            response.httpCode = res.statusCode;
+                            response.statusCode = res.statusCode;
+                            response.statusMessage = res.statusMessage;
+                            reject(response);
+                        }
+                    });
                 });
-                res.on("end", function () {
-                    let response: any = self.isJsonString(str) ? JSON.parse(str) : str;
-                    if (res.statusCode >= 200 && res.statusCode < 300) resolve(response);
-                    else {
-                        response.httpCode = res.statusCode;
-                        response.statusCode = res.statusCode;
-                        response.statusMessage = res.statusMessage;
-                        reject(response);
-                    }
+                req.on("error", (e: any) => {
+                    console.error(`problem with request: ${e.message}`);
+                    reject(e);
+                    req.destroy();
                 });
-            });
-            req.on("error", (e: any) => {
-                console.error(`problem with request: ${e.message}`);
-                reject(e);
-            });
-            if (data) {
-                req.write(data);
+                if (data) {
+                    req.write(data);
+                }
+                req.end();
+            } catch (error) {
+                console.log(`problem with request: ${error}`);
+                reject(error);
             }
-            req.end();
         });
     }
 
@@ -237,6 +246,7 @@ export class ComfortCloud {
             host: uri.host,
             port: uri.port,
             path: uri.path,
+            protocol: uri.protocol,
             method: method,
             headers: {
                 Connection: "Keep-Alive",
@@ -244,19 +254,34 @@ export class ComfortCloud {
                 Accept: "application/json",
                 Host: uri.hostname as string,
                 "X-APP-TYPE": 1,
-                "X-APP-VERSION": "1.20.0",
+                "X-APP-VERSION": "1.50.0",
                 "X-User-Authorization": this._accessToken,
                 "User-Agent": "G-RAC",
             },
         };
     }
 
-    isJsonString(str: string) {
+    /**
+     * Try to parse a string and return a valid JSON object. 
+     * If string is not valid JSON, it will return an empty object instead.
+     * @param input Input string to try to parse as a JSON object
+     * @returns Parsed or empty Json object
+     */
+    private JsonTryParse(input: string): object {
         try {
-            JSON.parse(str);
-        } catch (e) {
-            return false;
+            //check if the string exists
+            if (input) {
+                let o = JSON.parse(input);
+
+                //validate the result too
+                if (o && o.constructor === Object) {
+                    return o;
+                }
+            }
         }
-        return true;
+        catch (e: any) {
+        }
+
+        return { responseMessage: input };
     }
 }
