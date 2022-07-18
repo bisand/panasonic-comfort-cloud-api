@@ -86,7 +86,7 @@ export class ComfortCloud {
         const uri = url.parse(`${this._config.base_url}${this._config.login_url}`, true);
         const options: RequestOptions = this.getRequestOptions(HttpMethod.Post, uri);
         const result = await this.request(options, JSON.stringify(data));
-        if (result.result === 0) {
+        if (result?.result === 0) {
             this._accessToken = result.uToken;
             this._clientId = result.clientId;
             return result as LoginResponse;
@@ -102,7 +102,7 @@ export class ComfortCloud {
         const uri = url.parse(`${this._config.base_url}${this._config.group_url}`, true);
         const options: RequestOptions = this.getRequestOptions(HttpMethod.Get, uri);
         const result = await this.request(options);
-        if (result.iaqStatus.statusCode === 200) {
+        if (result?.iaqStatus?.statusCode === 200) {
             const data = result as GroupResponse;
             return data.groupList;
         }
