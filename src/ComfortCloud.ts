@@ -1,4 +1,5 @@
 import * as https from "https";
+import http from 'http';
 import { RequestOptions } from "https";
 import * as url from "url";
 import { HttpMethod } from "./models/HttpMethod";
@@ -12,6 +13,7 @@ export class ComfortCloud {
     private _config = {
         username: "",
         password: "",
+        cc_app_url: "https://itunes.apple.com/lookup?id=1348640525",
         base_url: "https://accsmart.panasonic.com",
         login_url: "/auth/login",
         group_url: "/device/group",
@@ -20,6 +22,7 @@ export class ComfortCloud {
         device_control_url: "/deviceStatus/control",
         device_history_url: "/deviceHistoryData",
     };
+
     private _accessToken: string = "";
     public get token(): string {
         return this._accessToken;
@@ -27,6 +30,7 @@ export class ComfortCloud {
     public set token(value: string) {
         this._accessToken = value;
     }
+
     private _clientId: string = "";
     public get clientId(): string {
         return this._clientId;
@@ -35,9 +39,38 @@ export class ComfortCloud {
         this._clientId = value;
     }
 
+    /**
+     * Panasonic Comfort Cloud app version.
+     */
+    private _ccAppVersion: string;
+    public get ccAppVersion(): string {
+        return this._ccAppVersion;
+    }
+    public set ccAppVersion(value: string) {
+        this._ccAppVersion = value;
+    }
+
     constructor(username: string, password: string) {
         this._config.username = username;
         this._config.password = password;
+        this._ccAppVersion = "1.15.0"; // This value will be replaced by value returned from Apple App Store.
+    }
+
+    /**
+     * Returns Panasonic Comfort Cloud app version
+     * @returns Version number as String
+     */
+    public async getCcAppVersion(): Promise<string> {
+        try {
+            const uri = url.parse(`${this._config.cc_app_url}`, true);
+            const options: RequestOptions = this.getRequestOptions(HttpMethod.Get, uri);
+            const response = await this.request(options);
+            const version = response.results[0].version;
+            return version;
+        } catch (error) {
+            console.error(error);
+        }
+        return this._ccAppVersion;
     }
 
     /**
@@ -48,6 +81,7 @@ export class ComfortCloud {
      */
     public async login(username: string = this._config.username, password: string = this._config.password): Promise<LoginResponse | undefined> {
         if (!username || !password) throw new Error("Username and password must contain a value.");
+        this._ccAppVersion = await this.getCcAppVersion();
         const data = new LoginRequest(username, password);
         const uri = url.parse(`${this._config.base_url}${this._config.login_url}`, true);
         const options: RequestOptions = this.getRequestOptions(HttpMethod.Post, uri);
@@ -199,30 +233,38 @@ export class ComfortCloud {
     private async request(options: https.RequestOptions, data?: any): Promise<any> {
         const self = this;
         return await new Promise<any>((resolve, reject) => {
-            const req = https.request(options, (res: any) => {
-                let str: string = "";
-                res.on("data", function (chunk: string) {
-                    str += chunk;
+            const client = (options.protocol == "https:") ? https : http;
+            try {
+                const req = client.request(options, (res: any) => {
+                    let str: string = "";
+                    res.on("data", (chunk: string) => {
+                        str += chunk;
+                    });
+                    res.on("end", () => {
+                        const response: any = this.JsonTryParse(str);
+                        if (res.statusCode >= 200 && res.statusCode < 300) {
+                            resolve(response);
+                        } else {
+                            response.httpCode = res.statusCode;
+                            response.statusCode = res.statusCode;
+                            response.statusMessage = res.statusMessage;
+                            reject(response);
+                        }
+                    });
                 });
-                res.on("end", function () {
-                    let response: any = self.isJsonString(str) ? JSON.parse(str) : str;
-                    if (res.statusCode >= 200 && res.statusCode < 300) resolve(response);
-                    else {
-                        response.httpCode = res.statusCode;
-                        response.statusCode = res.statusCode;
-                        response.statusMessage = res.statusMessage;
-                        reject(response);
-                    }
+                req.on("error", (e: any) => {
+                    console.error(`problem with request: ${e.message}`);
+                    reject(e);
+                    req.destroy();
                 });
-            });
-            req.on("error", (e: any) => {
-                console.error(`problem with request: ${e.message}`);
-                reject(e);
-            });
-            if (data) {
-                req.write(data);
+                if (data) {
+                    req.write(data);
+                }
+                req.end();
+            } catch (error) {
+                console.log(`problem with request: ${error}`);
+                reject(error);
             }
-            req.end();
         });
     }
 
@@ -237,6 +279,7 @@ export class ComfortCloud {
             host: uri.host,
             port: uri.port,
             path: uri.path,
+            protocol: uri.protocol,
             method: method,
             headers: {
                 Connection: "Keep-Alive",
@@ -244,19 +287,34 @@ export class ComfortCloud {
                 Accept: "application/json; charset=utf-8",
                 Host: uri.hostname as string,
                 "X-APP-TYPE": 1,
-                "X-APP-VERSION": "1.15.0",
+                "X-APP-VERSION": this._ccAppVersion,
                 "X-User-Authorization": this._accessToken,
                 "User-Agent": "G-RAC",
             },
         };
     }
 
-    isJsonString(str: string) {
+    /**
+     * Try to parse a string and return a valid JSON object. 
+     * If string is not valid JSON, it will return an empty object instead.
+     * @param input Input string to try to parse as a JSON object
+     * @returns Parsed or empty Json object
+     */
+    private JsonTryParse(input: string): object {
         try {
-            JSON.parse(str);
-        } catch (e) {
-            return false;
+            //check if the string exists
+            if (input) {
+                let o = JSON.parse(input);
+
+                //validate the result too
+                if (o && o.constructor === Object) {
+                    return o;
+                }
+            }
         }
-        return true;
+        catch (e: any) {
+        }
+
+        return { responseMessage: input };
     }
 }
