@@ -9,13 +9,22 @@
         "TS_NODE_PROJECT": "tsconfig.testing.json"
       },
       "runtimeExecutable": "node",
-      "runtimeArgs": ["--nolazy", "-r", "ts-node/register/transpile-only"],
-
-      "args": ["tests/debug.ts", "", ""],
-      
+      "runtimeArgs": [
+        "--nolazy",
+        "-r",
+        "ts-node/register/transpile-only"
+      ],
+      "args": [
+        "tests/debug.ts",
+        "",
+        ""
+      ],
       "cwd": "${workspaceRoot}",
       "internalConsoleOptions": "openOnSessionStart",
-      "skipFiles": ["<node_internals>/**", "node_modules/**"]
+      "skipFiles": [
+        "<node_internals>/**",
+        "node_modules/**"
+      ]
     },
     {
       "name": "Launch Program",
@@ -35,22 +44,38 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Mocha All",
-      "env": {
-        "TS_NODE_PROJECT": "tsconfig.testing.json"
-      },
-      "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+      "name": "Jest All",
+      "program": "${workspaceFolder}/node_modules/.bin/jest",
       "args": [
-        "-r",
-        "ts-node/register",
-        "--timeout",
-        "999999",
-        "--colors",
-        "${workspaceFolder}/tests/**/*-spec.ts",
+        "--runInBand",
+        "--detectOpenHandles",
+        "--config",
+        "${workspaceFolder}/jestconfig.json"
       ],
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
-      "protocol": "inspector"
+      "disableOptimisticBPs": true,
+      "windows": {
+        "program": "${workspaceFolder}/node_modules/jest/bin/jest"
+      }
     },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Jest Current File",
+      "program": "${workspaceFolder}/node_modules/.bin/jest",
+      "args": [
+        "${fileBasenameNoExtension}",
+        "--detectOpenHandles",
+        "--config",
+        "${workspaceFolder}/jestconfig.json"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "disableOptimisticBPs": true,
+      "windows": {
+        "program": "${workspaceFolder}/node_modules/jest/bin/jest"
+      }
+    }
   ]
 }

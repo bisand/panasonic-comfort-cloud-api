@@ -92,8 +92,7 @@ describe("ComfortCloud Tests", () => {
     });
     it('Should not crash when server returns an error', async () => {
         const scope = nock('https://accsmart.panasonic.com')
-            .persist()
-            .get('/device/group/')
+            .get('/device/group')
             .reply(403, 'Forbidden');
         const client = new ComfortCloud("test", "pwd");
         const parIn = {

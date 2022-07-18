@@ -13,6 +13,7 @@ export class ComfortCloud {
     private _config = {
         username: "",
         password: "",
+        cc_app_url: "https://itunes.apple.com/lookup?id=1348640525",
         base_url: "https://accsmart.panasonic.com",
         login_url: "/auth/login",
         group_url: "/device/group",
@@ -21,6 +22,7 @@ export class ComfortCloud {
         device_control_url: "/deviceStatus/control",
         device_history_url: "/deviceHistoryData",
     };
+
     private _accessToken: string = "";
     public get token(): string {
         return this._accessToken;
@@ -28,6 +30,7 @@ export class ComfortCloud {
     public set token(value: string) {
         this._accessToken = value;
     }
+
     private _clientId: string = "";
     public get clientId(): string {
         return this._clientId;
@@ -36,9 +39,38 @@ export class ComfortCloud {
         this._clientId = value;
     }
 
+    /**
+     * Panasonic Comfort Cloud app version.
+     */
+    private _ccAppVersion: string;
+    public get ccAppVersion(): string {
+        return this._ccAppVersion;
+    }
+    public set ccAppVersion(value: string) {
+        this._ccAppVersion = value;
+    }
+
     constructor(username: string, password: string) {
         this._config.username = username;
         this._config.password = password;
+        this._ccAppVersion = "1.15.0"; // This value will be replaced by value returned from Apple App Store.
+    }
+
+    /**
+     * Returns Panasonic Comfort Cloud app version
+     * @returns Version number as String
+     */
+    public async getCcAppVersion(): Promise<string> {
+        try {
+            const uri = url.parse(`${this._config.cc_app_url}`, true);
+            const options: RequestOptions = this.getRequestOptions(HttpMethod.Get, uri);
+            const response = await this.request(options);
+            const version = response.results[0].version;
+            return version;
+        } catch (error) {
+            console.error(error);
+        }
+        return this._ccAppVersion;
     }
 
     /**
@@ -49,6 +81,7 @@ export class ComfortCloud {
      */
     public async login(username: string = this._config.username, password: string = this._config.password): Promise<LoginResponse | undefined> {
         if (!username || !password) throw new Error("Username and password must contain a value.");
+        this._ccAppVersion = await this.getCcAppVersion();
         const data = new LoginRequest(username, password);
         const uri = url.parse(`${this._config.base_url}${this._config.login_url}`, true);
         const options: RequestOptions = this.getRequestOptions(HttpMethod.Post, uri);
@@ -254,7 +287,7 @@ export class ComfortCloud {
                 Accept: "application/json; charset=utf-8",
                 Host: uri.hostname as string,
                 "X-APP-TYPE": 1,
-                "X-APP-VERSION": "1.15.0",
+                "X-APP-VERSION": this._ccAppVersion,
                 "X-User-Authorization": this._accessToken,
                 "User-Agent": "G-RAC",
             },
