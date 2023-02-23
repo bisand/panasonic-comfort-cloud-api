@@ -53,7 +53,7 @@ export class ComfortCloud {
     constructor(username: string, password: string) {
         this._config.username = username;
         this._config.password = password;
-        this._ccAppVersion = "1.15.0"; // This value will be replaced by value returned from Apple App Store.
+        this._ccAppVersion = "1.17.0"; // This value will be replaced by value returned from Apple App Store.
     }
 
     /**
