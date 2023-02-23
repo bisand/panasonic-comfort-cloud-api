@@ -102,7 +102,7 @@ export class ComfortCloud {
         const uri = url.parse(`${this._config.base_url}${this._config.group_url}`, true);
         const options: RequestOptions = this.getRequestOptions(HttpMethod.Get, uri);
         const result = await this.request(options);
-        if (result?.iaqStatus?.statusCode === 200) {
+        if (result?.groupCount > 0) {
             const data = result as GroupResponse;
             return data.groupList;
         }
