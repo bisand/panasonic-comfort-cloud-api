@@ -242,12 +242,13 @@ export class ComfortCloud {
                     });
                     res.on("end", () => {
                         const response: any = this.JsonTryParse(str);
-                        if (res.statusCode >= 200 && res.statusCode < 300) {
+                        const statusCode: number = Number(res?.statusCode);
+                        if (statusCode >= 200 && statusCode < 300) {
                             resolve(response);
                         } else {
-                            response.httpCode = res.statusCode;
-                            response.statusCode = res.statusCode;
-                            response.statusMessage = res.statusMessage;
+                            response.httpCode = res?.statusCode;
+                            response.statusCode = res?.statusCode;
+                            response.statusMessage = res?.statusMessage;
                             reject(response);
                         }
                     });
