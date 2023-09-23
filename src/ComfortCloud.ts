@@ -276,6 +276,8 @@ export class ComfortCloud {
      * @returns An object containing request options
      */
     private getRequestOptions(method: HttpMethod, uri: url.UrlWithParsedQuery): https.RequestOptions {
+        current_time = datetime.datetime.now()
+        formatted_time = current_time.strftime('%Y-%m-%d %H:%M:%S')    
         return {
             host: uri.host,
             port: uri.port,
@@ -289,6 +291,9 @@ export class ComfortCloud {
                 Host: uri.hostname as string,
                 "X-APP-TYPE": 1,
                 "X-APP-VERSION": this._ccAppVersion,
+                "X-APP-NAME": "Comfort Cloud",
+                "X-APP-TIMESTAMP":formatted_time,
+                "X-CFC-API-KEY":"0",
                 "X-User-Authorization": this._accessToken,
                 "User-Agent": "G-RAC",
             },
