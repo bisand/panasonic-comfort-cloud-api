@@ -86,7 +86,7 @@ export class ComfortCloud {
         const uri = url.parse(`${this._config.base_url}${this._config.login_url}`, true);
         const options: RequestOptions = this.getRequestOptions(HttpMethod.Post, uri);
         const result = await this.request(options, JSON.stringify(data));
-        if (result?.result === 0) {
+        if (result?.uToken) {
             this._accessToken = result.uToken;
             this._clientId = result.clientId;
             return result as LoginResponse;
@@ -276,7 +276,7 @@ export class ComfortCloud {
      * @returns An object containing request options
      */
     private getRequestOptions(method: HttpMethod, uri: url.UrlWithParsedQuery): https.RequestOptions {
-        return {
+        const requestOptions: https.RequestOptions = {
             host: uri.host,
             port: uri.port,
             path: uri.path,
@@ -290,12 +290,17 @@ export class ComfortCloud {
                 "X-APP-TYPE": 1,
                 "X-APP-VERSION": this._ccAppVersion,
                 "X-APP-NAME": "Comfort Cloud",
-                "X-APP-TIMESTAMP":"0",
-                "X-CFC-API-KEY":"Comfort Cloud",
-                "X-User-Authorization": this._accessToken,
+                "X-APP-TIMESTAMP": "0",
+                "X-CFC-API-KEY": "Comfort Cloud",
                 "User-Agent": "G-RAC",
             },
         };
+    
+        if (this._accessToken !== '42' && requestOptions.headers) {
+            requestOptions.headers["X-User-Authorization"] = this._accessToken;
+        }
+    
+        return requestOptions;
     }
 
     /**
