@@ -8,6 +8,7 @@
       "env": {
         "TS_NODE_PROJECT": "tsconfig.testing.json"
       },
+      "envFile": "${workspaceFolder}/.env",
       "runtimeExecutable": "node",
       "runtimeArgs": [
         "--nolazy",
