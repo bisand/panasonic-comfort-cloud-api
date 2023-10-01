@@ -230,9 +230,9 @@ export class ComfortCloud {
      * @param data optional data to use for request body
      * @returns Promise<any>
      */
-    private async request(options: https.RequestOptions, data?: any): Promise<LoginResponse> {
+    private async request(options: https.RequestOptions, data?: any): Promise<any> {
         const self = this;
-        return await new Promise<LoginResponse>((resolve, reject) => {
+        return await new Promise<any>((resolve, reject) => {
             const client = (options.protocol == "https:") ? https : http;
             try {
                 const req = client.request(options, (res: any) => {
@@ -296,7 +296,7 @@ export class ComfortCloud {
             },
         };
     
-        if (this._accessToken !== '42') {
+        if (this._accessToken !== '42' && requestOptions.headers) {
             requestOptions.headers["X-User-Authorization"] = this._accessToken;
         }
     
