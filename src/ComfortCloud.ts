@@ -221,6 +221,7 @@ export class ComfortCloud {
         if (parameters.ecoFunctionData !== undefined) par.ecoFunctionData = parameters.ecoFunctionData;
         if (parameters.ecoMode !== undefined) par.ecoMode = parameters.ecoMode;
         if (parameters.operationMode !== undefined) par.operationMode = parameters.operationMode;
+        if (parameters.insideCleaning !== undefined) par.insideCleaning = parameters.insideCleaning;
         return par;
     }
 

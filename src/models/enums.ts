@@ -63,3 +63,9 @@ export enum NanoeMode {
     ModeG = 3,
     All = 4,
 }
+
+export enum InsideCleaning {
+    NotAvailable = 0,
+    Off = 1,
+    On = 2,
+}
