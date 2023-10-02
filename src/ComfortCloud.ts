@@ -181,7 +181,7 @@ export class ComfortCloud {
         }
     }
 
-    public async getDeviceHistory(deviceId: string, dataMode: DataMode = 0, date: string, timezone: string = "+01:00"): Promise<DeviceHistory> {
+    public async getDeviceHistory(deviceId: string, dataMode: DataMode = 0, date: string, timezone: string = "+00:00"): Promise<DeviceHistory> {
         const uri = url.parse(`${this._config.base_url}${this._config.device_history_url}`, true);
         const options: RequestOptions = this.getRequestOptions(HttpMethod.Post, uri);
         const requestBody = { deviceGuid: deviceId, dataMode: dataMode, date: date,osTimezone: timezone};
