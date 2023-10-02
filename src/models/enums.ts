@@ -63,3 +63,10 @@ export enum NanoeMode {
     ModeG = 3,
     All = 4,
 }
+
+export enum DataMode {
+    Day = 0,
+    Week = 1,
+    Month = 2,
+    Year = 4
+}
