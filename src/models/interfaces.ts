@@ -111,3 +111,19 @@ export interface DeviceParameters {
     actualNanoe?: NanoeMode;
     airSwingUD?: AirSwingUD;
 }
+
+export interface HistoryData {
+    dataNumber: number;
+    consumption: number;
+    averageSettingTemp: number;
+    averageInsideTemp: number;
+    averageOutsideTemp: number;
+    cost: number;
+  }
+  
+  export interface DeviceHistory {
+    energyConsumption: number;
+    deviceRegisterTime: string;
+    temperatureUnit: number;
+    historyDataList: HistoryData[];
+  }
