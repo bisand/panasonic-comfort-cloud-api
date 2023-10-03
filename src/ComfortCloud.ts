@@ -3,8 +3,8 @@ import http from 'http';
 import { RequestOptions } from "https";
 import * as url from "url";
 import { HttpMethod } from "./models/HttpMethod";
-import { OperationMode } from "./models/enums";
-import { Device, DeviceParameters, Group, GroupResponse } from "./models/interfaces";
+import { DataMode, OperationMode } from "./models/enums";
+import { Device, DeviceParameters, Group, GroupResponse, DeviceHistory } from "./models/interfaces";
 import { LoginRequest } from "./models/LoginRequest";
 import { LoginResponse } from "./models/LoginResponse";
 import { UpdateResponse } from "./models/UpdateResponse";
@@ -179,6 +179,14 @@ export class ComfortCloud {
             }
             return res;
         }
+    }
+
+    public async getDeviceHistory(deviceId: string, dataMode: DataMode = 0, date: string, timezone: string = "+00:00"): Promise<DeviceHistory> {
+        const uri = url.parse(`${this._config.base_url}${this._config.device_history_url}`, true);
+        const options: RequestOptions = this.getRequestOptions(HttpMethod.Post, uri);
+        const requestBody = { deviceGuid: deviceId, dataMode: dataMode, date: date,osTimezone: timezone};
+        const result = await this.request(options, JSON.stringify(requestBody));
+        return result as DeviceHistory;
     }
 
     public getDeviceParameters(device: Device): DeviceParameters {

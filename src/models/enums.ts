@@ -64,6 +64,13 @@ export enum NanoeMode {
     All = 4,
 }
 
+export enum DataMode {
+    Day = 0,
+    Week = 1,
+    Month = 2,
+    Year = 4
+}
+
 export enum InsideCleaning {
     NotAvailable = 0,
     Off = 1,

@@ -2,7 +2,7 @@ import { exit } from "process";
 import { ComfortCloud } from "../src";
 import * as dotenv from "dotenv";
 import { DeviceParameters } from "../src/models/interfaces";
-import { EcoMode, AirSwingLR, AirSwingUD, FanAutoMode, FanSpeed, OperationMode, Power } from "../src/models/enums";
+import { EcoMode, AirSwingLR, AirSwingUD, FanAutoMode, FanSpeed, OperationMode, Power, DataMode } from "../src/models/enums";
 
 dotenv.config();
 
@@ -19,6 +19,9 @@ const runner = new Promise<any>(async (resolve, reject) => {
         const deviceId = groups[0].deviceList[0].deviceGuid;
         const device = await client.getDevice(deviceId);
         console.log(device);
+
+        const hist = await client.getDeviceHistory(deviceId, DataMode.Day, "20231001");
+        console.log(hist);
 
         const deviceNow = await client.getDeviceNow(deviceId);
         console.log(deviceNow);
